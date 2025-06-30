@@ -1,14 +1,14 @@
-package com.solubris.air.api.human;
+package com.solubris.air.api.human.shop.item;
 
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-/**
- * Products would be a better name.
- */
 @RestController
-@RequestMapping("/shopItems")
+@RequestMapping("/shop-items")
 public class ShopItemsResource {
     private final ShopItemRepository shopItemRepository;
     private final ShopItemCategoryRepository shopItemCategoryRepository;
@@ -21,11 +21,6 @@ public class ShopItemsResource {
     @GetMapping("/{id}")
     public Mono<ShopItem> get(@PathVariable int id) {
         return shopItemRepository.findById(id);
-    }
-
-    @GetMapping("/{id}/categories")
-    public Flux<ShopItemCategory> getCategories(@PathVariable int id) {
-        return shopItemCategoryRepository.findByShopItemId(id);
     }
 
     @DeleteMapping("/{id}")

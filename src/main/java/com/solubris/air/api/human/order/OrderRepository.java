@@ -1,4 +1,4 @@
-package com.solubris.air.api.human;
+package com.solubris.air.api.human.order;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

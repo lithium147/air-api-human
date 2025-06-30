@@ -1,4 +1,4 @@
-package com.solubris.air.api.human;
+package com.solubris.air.api.human.customer;
 
 import reactor.core.publisher.Mono;
 
