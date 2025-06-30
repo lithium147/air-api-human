@@ -3,6 +3,7 @@ package com.solubris.air.api.human.customer;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -19,6 +20,11 @@ public class CustomersResource {
     @GetMapping("/{id}")
     public Mono<Customer> get(@PathVariable int id) {
         return service.getById(id);
+    }
+
+    @PostMapping("/")
+    public Mono<Customer> create(Customer customer) {
+        return service.save(customer);
     }
 
     @DeleteMapping("/{id}")

@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryShopItemRepository implements ShopItemRepository {
-    private final List<ShopItem> shopItems = new ArrayList<>();
+    private final List<ShopItem> data = new ArrayList<>();
 
     @Override
     public Mono<ShopItem> findById(int id) {
-        return Flux.fromIterable(shopItems)
+        return Flux.fromIterable(data)
                 .filter(s -> s.id() == id)
                 .singleOrEmpty();
     }
 
     @Override
     public Mono<Void> deleteById(int id) {
-        shopItems.removeIf(s -> s.id() == id);
-        return Mono.empty().then();
+        return Mono.just(data.removeIf(s -> s.id() == id))
+                .map(b -> null);
     }
 }

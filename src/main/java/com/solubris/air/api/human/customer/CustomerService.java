@@ -16,4 +16,8 @@ public class CustomerService {
     public Mono<Void> delete(int id) {
         return repository.deleteById(id);
     }
+
+    public Mono<Customer> save(Customer customer) {
+        return repository.save(customer);
+    }
 }

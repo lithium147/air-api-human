@@ -15,4 +15,9 @@ public class ShopItemConfiguration {
     public ShopItemCategoryRepository shopItemCategoryRepository() {
         return new InMemoryShopItemCategoryRepository();
     }
+
+    @Bean
+    public ShopItemService shopItemService(ShopItemRepository repository, ShopItemCategoryRepository categoryRepository) {
+        return new ShopItemService(repository, categoryRepository);
+    }
 }

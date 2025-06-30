@@ -10,22 +10,19 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/shop-items")
 public class ShopItemsResource {
-    private final ShopItemRepository shopItemRepository;
-    private final ShopItemCategoryRepository shopItemCategoryRepository;
+    private final ShopItemService service;
 
-    public ShopItemsResource(ShopItemRepository shopItemRepository, ShopItemCategoryRepository shopItemCategoryRepository) {
-        this.shopItemRepository = shopItemRepository;
-        this.shopItemCategoryRepository = shopItemCategoryRepository;
+    public ShopItemsResource(ShopItemService service) {
+        this.service = service;
     }
 
     @GetMapping("/{id}")
     public Mono<ShopItem> get(@PathVariable int id) {
-        return shopItemRepository.findById(id);
+        return service.getById(id);
     }
 
     @DeleteMapping("/{id}")
     public Mono<Void> delete(@PathVariable int id) {
-        return shopItemCategoryRepository.deleteByShopItemId(id)
-                .then(shopItemRepository.deleteById(id));
+        return service.delete(id);
     }
 }
