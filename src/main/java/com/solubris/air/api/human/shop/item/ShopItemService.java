@@ -1,13 +1,16 @@
 package com.solubris.air.api.human.shop.item;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class ShopItemService {
     private final ShopItemRepository repository;
-    private final ShopItemCategoryRepository categoryRepository;
+    private final ShopItemCategoryRepository shopItemCategoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ShopItemService(ShopItemRepository repository, ShopItemCategoryRepository categoryRepository) {
+    public ShopItemService(ShopItemRepository repository, ShopItemCategoryRepository shopItemCategoryRepository, CategoryRepository categoryRepository) {
         this.repository = repository;
+        this.shopItemCategoryRepository = shopItemCategoryRepository;
         this.categoryRepository = categoryRepository;
     }
 
@@ -16,7 +19,37 @@ public class ShopItemService {
     }
 
     public Mono<Void> delete(int id) {
-        return categoryRepository.deleteByShopItemId(id)
+        // should not be deleting the categories, but the links to the categories
+        // ShopItemCategory should be the link between ShopItem and Category
+        // delete all the ShopItemCategory records with matching shopItemId
+        return shopItemCategoryRepository.deleteByShopItemId(id)
                 .then(repository.deleteById(id));
+    }
+
+    public Flux<Category> getCategories(int id) {
+        return shopItemCategoryRepository.findByShopItemId(id)
+                .map(ShopItemCategory::categoryId)
+                .flatMap(categoryRepository::findById);
+    }
+
+    public Mono<Void> removeFromCategory(int id, String name) {
+        // find the id of the category
+        // remove by both shopItemId and categoryId
+        return categoryRepository.findByName(name)
+                .map(Category::id)
+                .flatMap(categoryId -> shopItemCategoryRepository.deleteByShopItemIdAndCategoryId(id, categoryId));
+    }
+
+    public Mono<Void> addToCategory(int id, String name) {
+        return categoryRepository.findByName(name)
+                .switchIfEmpty(createCategoryWhenMissing(id, name))
+                .map(Category::id)
+                .map(categoryId -> new ShopItemCategory(id, categoryId))
+                .flatMap(shopItemCategoryRepository::save);
+    }
+
+    private Mono<Category> createCategoryWhenMissing(int id, String name) {
+        return Mono.just(new Category(-1, name, ""))
+                .flatMap(categoryRepository::save);
     }
 }

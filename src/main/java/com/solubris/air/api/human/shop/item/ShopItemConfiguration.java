@@ -17,7 +17,12 @@ public class ShopItemConfiguration {
     }
 
     @Bean
-    public ShopItemService shopItemService(ShopItemRepository repository, ShopItemCategoryRepository categoryRepository) {
-        return new ShopItemService(repository, categoryRepository);
+    public CategoryRepository categoryRepository() {
+        return new InMemoryCategoryRepository();
+    }
+
+    @Bean
+    public ShopItemService shopItemService(ShopItemRepository repository, ShopItemCategoryRepository shopItemCategoryRepository, CategoryRepository categoryRepository) {
+        return new ShopItemService(repository, shopItemCategoryRepository, categoryRepository);
     }
 }
