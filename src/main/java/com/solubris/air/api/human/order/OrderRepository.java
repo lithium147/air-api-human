@@ -7,4 +7,5 @@ public interface OrderRepository {
     Mono<Order> findById(int id);
     Flux<Order> findByCustomerId(int customerId);
     Mono<Void> deleteById(int id);
+    Mono<Order> save(Order order);
 }

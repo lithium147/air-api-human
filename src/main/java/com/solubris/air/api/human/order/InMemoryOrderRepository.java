@@ -7,24 +7,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryOrderRepository implements OrderRepository {
-    private final List<Order> orders = new ArrayList<>();
+    private final List<Order> data = new ArrayList<>();
 
     @Override
     public Mono<Order> findById(int id) {
-        return Flux.fromIterable(orders)
+        return Flux.fromIterable(data)
                 .filter(o -> o.id() == id)
                 .singleOrEmpty();
     }
 
     @Override
     public Flux<Order> findByCustomerId(int customerId) {
-        return Flux.fromIterable(orders)
+        return Flux.fromIterable(data)
                 .filter(o -> o.customerId() == customerId);
     }
 
     @Override
     public Mono<Void> deleteById(int id) {
-        orders.removeIf(o -> o.id() == id);
+        data.removeIf(o -> o.id() == id);
         return Mono.empty().then();
+    }
+
+    @Override
+    public Mono<Order> save(Order order) {
+        data.add(order);
+        return Mono.just(order);
     }
 }
