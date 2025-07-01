@@ -50,6 +50,12 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>pl.rzrz</groupId>
+			<artifactId>assertj-reactor</artifactId>
+			<version>1.0.8</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

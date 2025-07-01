@@ -7,7 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryShopItemRepository implements ShopItemRepository {
-    private final List<ShopItem> data = new ArrayList<>();
+    private final List<ShopItem> data;
+
+    public InMemoryShopItemRepository(List<ShopItem> data) {
+        this.data = data;
+    }
+
+    public InMemoryShopItemRepository() {
+        this(new ArrayList<>());
+    }
 
     @Override
     public Mono<ShopItem> findById(int id) {
