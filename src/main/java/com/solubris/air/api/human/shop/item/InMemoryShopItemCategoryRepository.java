@@ -30,6 +30,6 @@ public class InMemoryShopItemCategoryRepository implements ShopItemCategoryRepos
     @Override
     public Mono<Void> save(ShopItemCategory sc) {
         return Mono.just(data.add(sc))
-                .map(b -> null);
+                .then();
     }
 }

@@ -1,23 +1,16 @@
 package com.solubris.air.api.human.shop.item;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
- * How to deal with categories?
- * Category could be treated like tags.
- * So just add the item to a category, and if the category exists,
- * use that, otherwise create it.
- * So can have end points under shop-items/id/categories/...
- * But what about endpoint to return all categories?
- * shop-items/categories/...
- */
 @RestController
 @RequestMapping("/shop-items")
 public class ShopItemsResource {
@@ -29,7 +22,13 @@ public class ShopItemsResource {
 
     @GetMapping("/{id}")
     public Mono<ShopItem> get(@PathVariable int id) {
-        return service.getById(id);
+        return service.getById(id)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
+
+    @DeleteMapping("/{id}")
+    public Mono<Void> delete(@PathVariable int id) {
+        return service.delete(id);
     }
 
     @GetMapping("/{id}/categories")
@@ -52,10 +51,5 @@ public class ShopItemsResource {
     @DeleteMapping("/{id}/categories/{name}")
     public Mono<Void> removeFromCategory(@PathVariable int id, @PathVariable String name) {
         return service.removeFromCategory(id, name);
-    }
-
-    @DeleteMapping("/{id}")
-    public Mono<Void> delete(@PathVariable int id) {
-        return service.delete(id);
     }
 }

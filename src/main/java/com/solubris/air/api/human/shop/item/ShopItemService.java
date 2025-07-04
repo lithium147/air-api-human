@@ -19,11 +19,9 @@ public class ShopItemService {
     }
 
     public Mono<Void> delete(int id) {
-        // should not be deleting the categories, but the links to the categories
-        // ShopItemCategory should be the link between ShopItem and Category
-        // delete all the ShopItemCategory records with matching shopItemId
-        return shopItemCategoryRepository.deleteByShopItemId(id)
-                .then(repository.deleteById(id));
+        return repository.findById(id)
+                .flatMap(item -> shopItemCategoryRepository.deleteByShopItemId(id)
+                        .then(repository.deleteById(id)));
     }
 
     public Flux<Category> getCategories(int id) {
@@ -49,7 +47,7 @@ public class ShopItemService {
     }
 
     private Mono<Category> createCategoryWhenMissing(int id, String name) {
-        return Mono.just(new Category(-1, name, ""))
+        return Mono.just(new Category(id, name, ""))
                 .flatMap(categoryRepository::save);
     }
 }
