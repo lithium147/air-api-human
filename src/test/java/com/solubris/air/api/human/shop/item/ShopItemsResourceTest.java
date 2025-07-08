@@ -97,4 +97,42 @@ class ShopItemsResourceTest {
             response.expectStatus().isOk();
         }
     }
+
+    @Nested
+    class UpdateShopItem {
+        @Test
+        void notFound() {
+            // given
+            ShopItem updatedItem = new ShopItem(999, "Updated Item", 199.99);
+
+            // when
+            WebTestClient.ResponseSpec response = webTestClient.put()
+                    .uri("/shop-items/999")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(updatedItem)
+                    .exchange();
+
+            // then
+            response.expectStatus().isNotFound();
+        }
+
+        @Test
+        void success() {
+            // given
+            shopItemRepository.save(TEST_SHOP_ITEM).block();
+            ShopItem updatedItem = new ShopItem(1, "Updated Item", 199.99);
+
+            // when
+            WebTestClient.ResponseSpec response = webTestClient.put()
+                    .uri("/shop-items/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(updatedItem)
+                    .exchange();
+
+            // then
+            response.expectStatus().isOk()
+                    .expectBody(ShopItem.class)
+                    .isEqualTo(updatedItem);
+        }
+    }
 }
