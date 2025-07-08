@@ -67,4 +67,11 @@ public class ShopItemsResource {
     public Mono<Void> removeFromCategory(@PathVariable int id, @PathVariable String name) {
         return service.removeFromCategory(id, name);
     }
+
+    @PutMapping("/{id}")
+    public Mono<ShopItem> update(@PathVariable int id, @RequestBody ShopItem shopItem) {
+        return service.update(id, shopItem)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
+
 }

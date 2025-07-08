@@ -18,6 +18,11 @@ public class ShopItemService {
         return repository.findById(id);
     }
 
+    public Mono<ShopItem> update(int id, ShopItem shopItem) {
+        return repository.findById(id)
+                .flatMap(existingItem -> repository.save(shopItem));
+    }
+
     public Mono<ShopItem> save(ShopItem shopItem) {
         return repository.save(shopItem);
     }

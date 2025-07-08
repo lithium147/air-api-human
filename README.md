@@ -15,7 +15,7 @@ The generated tests are end to end, would be better to be controller layer only.
 |------------------|------|-------|---|---|
 | Customer         |      |       |   |   |
 | ShopItemCategory |      |       |   |   |
-| ShopItem         | -R-D | -R-D  |   |   |
+| ShopItem         | CR-D | CR-D  |   |   |
 | Order            |      |       |   |   |
 
 Finish one end point completely before doing others
