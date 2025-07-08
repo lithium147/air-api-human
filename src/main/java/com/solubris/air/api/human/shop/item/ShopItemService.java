@@ -18,10 +18,13 @@ public class ShopItemService {
         return repository.findById(id);
     }
 
-    public Mono<Void> delete(int id) {
-        return repository.findById(id)
-                .flatMap(item -> shopItemCategoryRepository.deleteByShopItemId(id)
-                        .then(repository.deleteById(id)));
+    public Mono<ShopItem> save(ShopItem shopItem) {
+        return repository.save(shopItem);
+    }
+
+    public Mono<Boolean> delete(int id) {
+        return shopItemCategoryRepository.deleteByShopItemId(id)
+                .then(repository.deleteById(id));
     }
 
     public Flux<Category> getCategories(int id) {

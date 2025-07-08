@@ -4,6 +4,6 @@ import reactor.core.publisher.Mono;
 
 public interface ShopItemRepository {
     Mono<ShopItem> findById(int id);
-    Mono<Void> deleteById(int id);
+    Mono<Boolean> deleteById(int id);
     Mono<ShopItem> save(ShopItem shopItem);
 }

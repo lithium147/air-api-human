@@ -25,9 +25,8 @@ public class InMemoryShopItemRepository implements ShopItemRepository {
     }
 
     @Override
-    public Mono<Void> deleteById(int id) {
-        return Mono.just(data.removeIf(s -> s.id() == id))
-                .then();
+    public Mono<Boolean> deleteById(int id) {
+        return Mono.just(data.removeIf(s -> s.id() == id));
     }
 
     @Override
