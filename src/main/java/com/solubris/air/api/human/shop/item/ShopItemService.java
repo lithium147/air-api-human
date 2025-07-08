@@ -22,9 +22,14 @@ public class ShopItemService {
         return repository.save(shopItem);
     }
 
+    /**
+     * Save a call to the shopItemCategoryRepository when repository.deleteById() returns false
+     */
     public Mono<Boolean> delete(int id) {
-        return shopItemCategoryRepository.deleteByShopItemId(id)
-                .then(repository.deleteById(id));
+        return repository.deleteById(id)
+                .doOnNext(b -> {
+                    if (b) shopItemCategoryRepository.deleteByShopItemId(id);
+                });
     }
 
     public Flux<Category> getCategories(int id) {

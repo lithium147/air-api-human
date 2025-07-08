@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @RestController
 @RequestMapping("/shop-items")
 public class ShopItemsResource {
@@ -26,7 +28,7 @@ public class ShopItemsResource {
     @GetMapping("/{id}")
     public Mono<ShopItem> get(@PathVariable int id) {
         return service.getById(id)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
+                .switchIfEmpty(Mono.error(new ResponseStatusException(NOT_FOUND)));
     }
 
     @PostMapping
@@ -39,7 +41,7 @@ public class ShopItemsResource {
     public Mono<Void> delete(@PathVariable int id) {
         return service.delete(id)
                 .flatMap(b -> {
-                    if (!b) return Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND));
+                    if (!b) return Mono.error(new ResponseStatusException(NOT_FOUND));
                     return Mono.empty().then();
                 });
     }
